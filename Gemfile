@@ -9,6 +9,7 @@ gem 'activerecord'
 gem 'sinatra-activerecord'
 gem 'database_cleaner'
 gem 'rack-flash3', require: 'rack-flash'
+gem 'pry', require: false
  
 gem 'pony', require: false
 
