@@ -1,4 +1,4 @@
-require 'apartment_site'
+require 'apartment_system'
 
 require 'app/front'
 

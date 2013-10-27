@@ -3,4 +3,4 @@ require 'bundler'
 Bundler.require
 require './test/test_helper'
 
-require 'apartment_site'
+require 'apartment_system'
