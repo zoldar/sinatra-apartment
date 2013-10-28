@@ -11,7 +11,7 @@ class ApartmentTest < Minitest::Test
     a1.save
 
     a2 = Model::Apartment.create(name: "Apartment 1")
-    assert_equal a2.save, false
+    assert_equal false, a2.save
   end
   
   def test_default_returns_first_apartment
