@@ -1,7 +1,7 @@
 ---
 test:
   adapter: sqlite3
-  database: db/apartment_test.sqlite
+  database: db/landlord_test.sqlite
 development:
   adapter: sqlite3
-  database: db/apartment_development.sqlite
+  database: db/landlord_development.sqlite

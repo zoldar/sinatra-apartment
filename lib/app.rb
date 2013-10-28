@@ -1,8 +1,8 @@
-require 'apartment_system'
+require 'landlord'
 
 require 'app/front'
 
-class ApartmentApp < Sinatra::Base
+class LandLordApp < Sinatra::Base
 
   set :root, 'lib/app'
   set :method_override, true

@@ -4,7 +4,7 @@ class FrontAppTest < Minitest::Test
   include Rack::Test::Methods
 
   def app
-    ApartmentApp
+    LandLordApp
   end
 
   def teardown

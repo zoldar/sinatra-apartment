@@ -1,4 +1,4 @@
-class ApartmentApp < Sinatra::Base
+class LandLordApp < Sinatra::Base
   
   get '/' do
     erb :front, locals: {who: params[:who]}

@@ -1,0 +1,50 @@
+A scratchbook for ideas about the design of the system. Eventually should
+become part of technical reference for that small project. We'll see how
+it will pan out.
+
+One of assumptions is that there can be more than a single apartment in the future.
+
+
+First iteration
+
+- there's an apartment that has a name
+- apartment has availability schedule
+- a simple reservation on basic contact details can be made (no payments
+or any additional steps)
+
+Considerations:
+
+- calculated availability must be stored independently to avoid overhead
+of querying schedule and reservations in multiple steps
+- unique ID should be generated for every reservation for easy identification.
+For now, it will be enough to rely on auto-incremented primary key
+
+
+Data model
+
+Apartment
+- name
+
+Schedule
+- apartment [belongs to]
+- from
+- to
+- state [avaiable|unavailable]
+
+Reservation
+- apartment [belongs to]
+- uid
+- from
+- to
+- first_name
+- last_name
+- email
+- state [unconfirmed|confirmed]
+
+Availability
+- apartment
+- from
+- to
+- state [available|unavailable]
+
+
