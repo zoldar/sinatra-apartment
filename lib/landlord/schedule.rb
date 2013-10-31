@@ -29,7 +29,7 @@ module Model
 
     def entries_overlapping_with_range(state, from, to)
       @apartment.schedule_entry.where("`from` <= ? and `to` >= ? and state = ?", 
-                                      to, from, state).order("`from`")
+                                      to, from, state).order("`from`").to_a
     end
     
     def entries_contain_range?(entries, from, to)
@@ -39,8 +39,6 @@ module Model
     def continuous?(entries)
       continuity_flag = true
       previous_entry = nil
-      # FIXME: Wanted to use find_each but in ends up with a weird exception.
-      # Needs consulting.
       entries.each do |entry|
         if !previous_entry.nil? && entry.from > previous_entry.to
           continuity_flag = false
