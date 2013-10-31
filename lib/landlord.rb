@@ -6,6 +6,8 @@ require 'landlord/apartment'
 require 'landlord/schedule_entry'
 require 'landlord/schedule'
 
+ActiveRecord::Base.logger = Logger.new(STDOUT)
+
 require 'db/connection'
 DB::Connection.establish
 
