@@ -5,6 +5,7 @@ require 'landlord/validators'
 require 'landlord/apartment'
 require 'landlord/schedule_entry'
 require 'landlord/schedule'
+require 'landlord/reservation'
 
 ActiveRecord::Base.logger = Logger.new(STDOUT)
 
