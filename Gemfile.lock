@@ -13,6 +13,7 @@ GEM
       i18n (~> 0.6, >= 0.6.4)
       multi_json (~> 1.0)
     arel (3.0.2)
+    bacon (1.2.0)
     bond (0.4.3)
     builder (3.0.4)
     coderay (1.0.9)
@@ -43,6 +44,8 @@ GEM
     mocha (0.14.0)
       metaclass (~> 0.0.1)
     multi_json (1.8.2)
+    petroglyph (0.0.7)
+      tilt
     polyglot (0.3.3)
     pony (1.5.1)
       mail (>= 2.0)
@@ -76,6 +79,9 @@ GEM
     sinatra-activerecord (1.2.3)
       activerecord (>= 3.0)
       sinatra (~> 1.0)
+    sinatra-formhelpers-ng (1.9.0)
+      bacon
+      rack-test
     skinny (0.2.3)
       eventmachine (~> 1.0.0)
       thin (~> 1.5.0)
@@ -108,6 +114,7 @@ DEPENDENCIES
   mailcatcher
   minitest (~> 5.0)
   mocha
+  petroglyph
   pony
   pry
   rack-flash3
@@ -116,6 +123,7 @@ DEPENDENCIES
   shotgun
   sinatra
   sinatra-activerecord
+  sinatra-formhelpers-ng
   sqlite3
   tux
   validates_email_format_of
