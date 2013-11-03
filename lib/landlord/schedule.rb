@@ -10,7 +10,7 @@ module Model
     end
     
     def available?(from, to)
-      raise ArgumentError, "To cannot be the same or earlier than from." unless from <= to
+      raise ArgumentError, "To cannot be the same or earlier than from." unless from < to
 
       entries_available = entries_overlapping_with_range('available', from, to)
       entries_unavailable = entries_overlapping_with_range('unavailable', from, to)
