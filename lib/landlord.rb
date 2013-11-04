@@ -7,6 +7,7 @@ require 'landlord/schedule_entry'
 require 'landlord/schedule'
 require 'landlord/reservation'
 require 'landlord/reservation_schedule'
+require 'landlord/availability'
 
 ActiveRecord::Base.logger = Logger.new(STDOUT)
 

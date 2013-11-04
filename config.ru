@@ -9,7 +9,7 @@ require 'api'
 ENV['RACK_ENV'] ||= 'development'
 
 use ActiveRecord::ConnectionAdapters::ConnectionManagement
-run ApartmentApp
+run LandLordApp
 
 map '/api/v1/' do
   run LandLordAPI

@@ -152,7 +152,7 @@ class ScheduleWithTwoIntermittentEntriesTest < Minitest::Test
   end
 end
 
-class ScheduleWithTwoAvailableOverlappingEntries < Minitest::Test
+class ScheduleWithTwoAvailableOverlappingEntriesTest < Minitest::Test
   def setup
     super
 
@@ -182,7 +182,7 @@ class ScheduleWithTwoAvailableOverlappingEntries < Minitest::Test
   end
 end
 
-class ScheduleWithTwoAlternateOverlappingEntries < Minitest::Test
+class ScheduleWithTwoAlternateOverlappingEntriesTest < Minitest::Test
   def setup
     super
 
@@ -219,5 +219,78 @@ class ScheduleWithTwoAlternateOverlappingEntries < Minitest::Test
   def test_available_when_contained_only_in_outer_entry
     assert @schedule.available?(Date.new(2013, 2, 21),
                                 Date.new(2013, 2, 23))
+  end
+end
+
+class ScheduleWithOneEntryAvailabilityTest < Minitest::Test
+  def setup
+    super
+    @apartment = Model::Apartment.create!(name: "Apartment with schedule")
+
+    Model::ScheduleEntry.create!(apartment_id: @apartment.id,
+                                 from: Date.new(2013, 2, 13),
+                                 to: Date.new(2013, 2, 18),
+                                 state: 'available')
+
+    @schedule = Model::Schedule.for(@apartment)
+  end
+  
+  def test_availability_over_both_edges
+    days = @schedule.availability(Date.new(2013, 2, 10), Date.new(2013, 2, 20))
+
+    expected = [{day: Date.new(2013, 2, 10), state: 'unavailable'},
+                {day: Date.new(2013, 2, 11), state: 'unavailable'},
+                {day: Date.new(2013, 2, 12), state: 'unavailable'},
+                {day: Date.new(2013, 2, 13), state: 'available'},
+                {day: Date.new(2013, 2, 14), state: 'available'},
+                {day: Date.new(2013, 2, 15), state: 'available'},
+                {day: Date.new(2013, 2, 16), state: 'available'},
+                {day: Date.new(2013, 2, 17), state: 'available'},
+                {day: Date.new(2013, 2, 18), state: 'available'},
+                {day: Date.new(2013, 2, 19), state: 'unavailable'},
+                {day: Date.new(2013, 2, 20), state: 'unavailable'}]
+
+    assert_equal expected, days
+  end
+end
+
+class ScheduleWithTwoAlternateOverlappingEntriesAvailabilityTest < Minitest::Test
+  def setup
+    super
+
+    @apartment = Model::Apartment.create!(name: "Apartment with schedule")
+
+    Model::ScheduleEntry.create!(apartment_id: @apartment.id,
+                                 from: Date.new(2013, 2, 13),
+                                 to: Date.new(2013, 2, 24),
+                                 state: 'available')
+
+    Model::ScheduleEntry.create!(apartment_id: @apartment.id,
+                                 from: Date.new(2013, 2, 15),
+                                 to: Date.new(2013, 2, 20),
+                                 state: 'unavailable')
+
+    @schedule = Model::Schedule.for(@apartment)
+  end
+
+  def test_availability_over_both_edges
+    days = @schedule.availability(Date.new(2013, 2, 12), Date.new(2013, 2, 25))
+
+    expected = [{day: Date.new(2013, 2, 12), state: 'unavailable'},
+                {day: Date.new(2013, 2, 13), state: 'available'},
+                {day: Date.new(2013, 2, 14), state: 'available'},
+                {day: Date.new(2013, 2, 15), state: 'unavailable'},
+                {day: Date.new(2013, 2, 16), state: 'unavailable'},
+                {day: Date.new(2013, 2, 17), state: 'unavailable'},
+                {day: Date.new(2013, 2, 18), state: 'unavailable'},
+                {day: Date.new(2013, 2, 19), state: 'unavailable'},
+                {day: Date.new(2013, 2, 20), state: 'unavailable'},
+                {day: Date.new(2013, 2, 21), state: 'available'},
+                {day: Date.new(2013, 2, 22), state: 'available'},
+                {day: Date.new(2013, 2, 23), state: 'available'},
+                {day: Date.new(2013, 2, 24), state: 'available'},
+                {day: Date.new(2013, 2, 25), state: 'unavailable'}]
+
+    assert_equal expected, days
   end
 end

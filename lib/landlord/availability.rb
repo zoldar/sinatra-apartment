@@ -9,8 +9,8 @@ module Model
     end
     
     def available?(from, to)
-      Schedule.for(apartment).available?(from, to) && 
-        ReservationSchedule.for(apartment).available?(from, to)
+      Schedule.for(@apartment).available?(from, to) && 
+        ReservationSchedule.for(@apartment).available?(from, to)
     end
   end
 end

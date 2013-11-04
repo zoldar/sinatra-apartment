@@ -1,6 +1,8 @@
 require 'landlord'
 require 'sinatra/petroglyph'
 
+require 'api/availability'
+
 class LandLordAPI < Sinatra::Base
   set :environment, ENV.fetch('RACK_ENV') { :development }.to_sym
   set :root, 'lib/api'
