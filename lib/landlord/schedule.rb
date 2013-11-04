@@ -24,7 +24,7 @@ module Model
     def availability(from, to)
       raise ArgumentError, "To cannot be the same or earlier than from." unless from < to
 
-      availability = []
+      availability = {}
 
       entries_available = entries_overlapping_with_range('available', from, to)
       days_available = create_bounded_set(entries_available, from, to)
@@ -36,7 +36,7 @@ module Model
         if days_available.include?(day) && !days_unavailable.include?(day)
           state = 'available'
         end
-        availability.append({day: day, state: state})
+        availability[day] = state
       end
       availability
     end

@@ -238,17 +238,17 @@ class ScheduleWithOneEntryAvailabilityTest < Minitest::Test
   def test_availability_over_both_edges
     days = @schedule.availability(Date.new(2013, 2, 10), Date.new(2013, 2, 20))
 
-    expected = [{day: Date.new(2013, 2, 10), state: 'unavailable'},
-                {day: Date.new(2013, 2, 11), state: 'unavailable'},
-                {day: Date.new(2013, 2, 12), state: 'unavailable'},
-                {day: Date.new(2013, 2, 13), state: 'available'},
-                {day: Date.new(2013, 2, 14), state: 'available'},
-                {day: Date.new(2013, 2, 15), state: 'available'},
-                {day: Date.new(2013, 2, 16), state: 'available'},
-                {day: Date.new(2013, 2, 17), state: 'available'},
-                {day: Date.new(2013, 2, 18), state: 'available'},
-                {day: Date.new(2013, 2, 19), state: 'unavailable'},
-                {day: Date.new(2013, 2, 20), state: 'unavailable'}]
+    expected = {Date.new(2013, 2, 10) => 'unavailable',
+                Date.new(2013, 2, 11) => 'unavailable',
+                Date.new(2013, 2, 12) => 'unavailable',
+                Date.new(2013, 2, 13) => 'available',
+                Date.new(2013, 2, 14) => 'available',
+                Date.new(2013, 2, 15) => 'available',
+                Date.new(2013, 2, 16) => 'available',
+                Date.new(2013, 2, 17) => 'available',
+                Date.new(2013, 2, 18) => 'available',
+                Date.new(2013, 2, 19) => 'unavailable',
+                Date.new(2013, 2, 20) => 'unavailable'}
 
     assert_equal expected, days
   end
@@ -276,20 +276,20 @@ class ScheduleWithTwoAlternateOverlappingEntriesAvailabilityTest < Minitest::Tes
   def test_availability_over_both_edges
     days = @schedule.availability(Date.new(2013, 2, 12), Date.new(2013, 2, 25))
 
-    expected = [{day: Date.new(2013, 2, 12), state: 'unavailable'},
-                {day: Date.new(2013, 2, 13), state: 'available'},
-                {day: Date.new(2013, 2, 14), state: 'available'},
-                {day: Date.new(2013, 2, 15), state: 'unavailable'},
-                {day: Date.new(2013, 2, 16), state: 'unavailable'},
-                {day: Date.new(2013, 2, 17), state: 'unavailable'},
-                {day: Date.new(2013, 2, 18), state: 'unavailable'},
-                {day: Date.new(2013, 2, 19), state: 'unavailable'},
-                {day: Date.new(2013, 2, 20), state: 'unavailable'},
-                {day: Date.new(2013, 2, 21), state: 'available'},
-                {day: Date.new(2013, 2, 22), state: 'available'},
-                {day: Date.new(2013, 2, 23), state: 'available'},
-                {day: Date.new(2013, 2, 24), state: 'available'},
-                {day: Date.new(2013, 2, 25), state: 'unavailable'}]
+    expected = {Date.new(2013, 2, 12) => 'unavailable',
+                Date.new(2013, 2, 13) => 'available',
+                Date.new(2013, 2, 14) => 'available',
+                Date.new(2013, 2, 15) => 'unavailable',
+                Date.new(2013, 2, 16) => 'unavailable',
+                Date.new(2013, 2, 17) => 'unavailable',
+                Date.new(2013, 2, 18) => 'unavailable',
+                Date.new(2013, 2, 19) => 'unavailable',
+                Date.new(2013, 2, 20) => 'unavailable',
+                Date.new(2013, 2, 21) => 'available',
+                Date.new(2013, 2, 22) => 'available',
+                Date.new(2013, 2, 23) => 'available',
+                Date.new(2013, 2, 24) => 'available',
+                Date.new(2013, 2, 25) => 'unavailable'}
 
     assert_equal expected, days
   end
