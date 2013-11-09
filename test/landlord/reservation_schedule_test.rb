@@ -1,6 +1,18 @@
 require 'date'
 require './test/test_helper'
 
+module TestHelpers
+  def fake_reservation(apartment, from, to)
+    {apartment_id: apartment.id,
+     first_name: 'John',
+     last_name: 'Doe',
+     email: 'john@doe.com',
+     from: from,
+     to: to,
+     state: 'confirmed'}
+  end
+end
+
 class BlankReservationScheduleTest < Minitest::Test
   def setup
     super
@@ -28,18 +40,14 @@ class BlankReservationScheduleTest < Minitest::Test
 end
 
 class SingleReservationScheduleTest < Minitest::Test
+  include TestHelpers
+
   def setup
     super
 
     @apartment = Model::Apartment.create!(name: "The apartment")
-    example_data = {apartment_id: @apartment.id,
-                    first_name: 'John',
-                    last_name: 'Doe',
-                    email: 'john@doe.com',
-                    from: Date.new(2013, 2, 13),
-                    to: Date.new(2013, 2, 18),
-                    state: 'confirmed'}
-    Model::Reservation.create!(example_data)
+    reservation = fake_reservation(@apartment, Date.new(2013, 2, 13), Date.new(2013, 2, 18))
+    Model::Reservation.create!(reservation)
     @schedule = Model::ReservationSchedule.for(@apartment)
   end
 
@@ -47,19 +55,149 @@ class SingleReservationScheduleTest < Minitest::Test
     refute @schedule.available?(Date.new(2013, 2, 11),
                                 Date.new(2013, 2, 15))
   end
-  
+
   def test_available_when_touches_excluded_left_edge
     assert @schedule.available?(Date.new(2013, 2, 10),
                                 Date.new(2013, 2, 13))
   end
-  
+
   def test_available_when_touches_excluded_right_edge
     assert @schedule.available?(Date.new(2013, 2, 18),
                                 Date.new(2013, 2, 21))
   end
-  
+
   def test_available_when_completely_beyond_reservation
     assert @schedule.available?(Date.new(2013, 4, 18),
                                 Date.new(2013, 4, 21))
+  end
+end
+
+class TwoIntermittentReservationScheduleTest < Minitest::Test
+  include TestHelpers
+
+  def setup
+    super
+
+    @apartment = Model::Apartment.create!(name: "The apartment")
+    reservation1 = fake_reservation(@apartment, 
+                                    Date.new(2013, 2, 13), 
+                                    Date.new(2013, 2, 14))
+    Model::Reservation.create!(reservation1)
+    reservation2 = fake_reservation(@apartment, 
+                                    Date.new(2013, 2, 15), 
+                                    Date.new(2013, 2, 18))
+    Model::Reservation.create!(reservation2)
+
+    @schedule = Model::ReservationSchedule.for(@apartment)
+  end
+
+  def test_available_when_between
+    assert @schedule.available?(Date.new(2013, 2, 14),
+                                Date.new(2013, 2, 15))
+  end
+  
+  def test_unavailable_when_overlaps
+    refute @schedule.available?(Date.new(2013, 2, 13),
+                                Date.new(2013, 2, 15))
+  end
+end
+
+class SingleReservationScheduleAvailabilityTest < Minitest::Test
+  include TestHelpers
+
+  def setup
+    super
+
+    @apartment = Model::Apartment.create!(name: "The apartment")
+    reservation = fake_reservation(@apartment,
+                                   Date.new(2013, 2, 13),
+                                   Date.new(2013, 2, 18))
+    Model::Reservation.create!(reservation)
+    @schedule = Model::ReservationSchedule.for(@apartment)
+  end
+
+  def test_availability
+    days = @schedule.availability(Date.new(2013, 2, 12), Date.new(2013, 2, 19))
+
+    expected = {Date.new(2013, 2, 12) => {state: 'available'},
+                Date.new(2013, 2, 13) => {state: 'available', slope: 'left'},
+                Date.new(2013, 2, 14) => {state: 'unavailable'},
+                Date.new(2013, 2, 15) => {state: 'unavailable'},
+                Date.new(2013, 2, 16) => {state: 'unavailable'},
+                Date.new(2013, 2, 17) => {state: 'unavailable'},
+                Date.new(2013, 2, 18) => {state: 'available', slope: 'right'},
+                Date.new(2013, 2, 19) => {state: 'available'}}
+
+    assert_equal expected, days
+  end
+end
+
+class TwoSideBySideReservationScheduleAvailabilityTest < Minitest::Test
+  include TestHelpers
+
+  def setup
+    super
+
+    @apartment = Model::Apartment.create!(name: "The apartment")
+    reservation1 = fake_reservation(@apartment, 
+                                    Date.new(2013, 2, 13), 
+                                    Date.new(2013, 2, 15))
+    Model::Reservation.create!(reservation1)
+    reservation2 = fake_reservation(@apartment, 
+                                    Date.new(2013, 2, 15), 
+                                    Date.new(2013, 2, 18))
+    Model::Reservation.create!(reservation2)
+
+    @schedule = Model::ReservationSchedule.for(@apartment)
+  end
+
+  def test_availability
+    days = @schedule.availability(Date.new(2013, 2, 12), Date.new(2013, 2, 19))
+
+    expected = {Date.new(2013, 2, 12) => {state: 'available'},
+                Date.new(2013, 2, 13) => {state: 'available', slope: 'left'},
+                Date.new(2013, 2, 14) => {state: 'unavailable'},
+                Date.new(2013, 2, 15) => {state: 'unavailable'},
+                Date.new(2013, 2, 16) => {state: 'unavailable'},
+                Date.new(2013, 2, 17) => {state: 'unavailable'},
+                Date.new(2013, 2, 18) => {state: 'available', slope: 'right'},
+                Date.new(2013, 2, 19) => {state: 'available'}}
+
+    assert_equal expected, days
+  end
+end
+
+class TwoIntermittentReservationScheduleAvailabilityTest < Minitest::Test
+  include TestHelpers
+
+  def setup
+    super
+
+    @apartment = Model::Apartment.create!(name: "The apartment")
+    reservation1 = fake_reservation(@apartment, 
+                                    Date.new(2013, 2, 13), 
+                                    Date.new(2013, 2, 14))
+    Model::Reservation.create!(reservation1)
+    reservation2 = fake_reservation(@apartment, 
+                                    Date.new(2013, 2, 15), 
+                                    Date.new(2013, 2, 18))
+    Model::Reservation.create!(reservation2)
+
+    @schedule = Model::ReservationSchedule.for(@apartment)
+  end
+
+  def test_availability
+    days = @schedule.availability(Date.new(2013, 2, 12), Date.new(2013, 2, 19))
+
+    expected = {Date.new(2013, 2, 12) => {state: 'available'},
+                Date.new(2013, 2, 13) => {state: 'available', slope: 'left'},
+                Date.new(2013, 2, 14) => {state: 'available', slope: 'right'},
+                Date.new(2013, 2, 15) => {state: 'available', slope: 'left'},
+                Date.new(2013, 2, 16) => {state: 'unavailable'},
+                Date.new(2013, 2, 17) => {state: 'unavailable'},
+                Date.new(2013, 2, 18) => {state: 'available', slope: 'right'},
+                Date.new(2013, 2, 19) => {state: 'available'}}
+
+    assert_equal expected, days
   end
 end
