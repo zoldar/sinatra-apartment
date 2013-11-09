@@ -1,17 +1,6 @@
 require 'date'
 require './test/test_helper'
-
-module TestHelpers
-  def fake_reservation(apartment, from, to)
-    {apartment_id: apartment.id,
-     first_name: 'John',
-     last_name: 'Doe',
-     email: 'john@doe.com',
-     from: from,
-     to: to,
-     state: 'confirmed'}
-  end
-end
+require './test/model_helpers'
 
 class BlankReservationScheduleTest < Minitest::Test
   def setup
@@ -40,7 +29,7 @@ class BlankReservationScheduleTest < Minitest::Test
 end
 
 class SingleReservationScheduleTest < Minitest::Test
-  include TestHelpers
+  include ModelHelpers
 
   def setup
     super
@@ -73,7 +62,7 @@ class SingleReservationScheduleTest < Minitest::Test
 end
 
 class TwoIntermittentReservationScheduleTest < Minitest::Test
-  include TestHelpers
+  include ModelHelpers
 
   def setup
     super
@@ -103,7 +92,7 @@ class TwoIntermittentReservationScheduleTest < Minitest::Test
 end
 
 class SingleReservationScheduleAvailabilityTest < Minitest::Test
-  include TestHelpers
+  include ModelHelpers
 
   def setup
     super
@@ -133,7 +122,7 @@ class SingleReservationScheduleAvailabilityTest < Minitest::Test
 end
 
 class TwoSideBySideReservationScheduleAvailabilityTest < Minitest::Test
-  include TestHelpers
+  include ModelHelpers
 
   def setup
     super
@@ -168,7 +157,7 @@ class TwoSideBySideReservationScheduleAvailabilityTest < Minitest::Test
 end
 
 class TwoIntermittentReservationScheduleAvailabilityTest < Minitest::Test
-  include TestHelpers
+  include ModelHelpers
 
   def setup
     super
