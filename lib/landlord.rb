@@ -9,7 +9,7 @@ require 'landlord/reservation'
 require 'landlord/reservation_schedule'
 require 'landlord/availability'
 
-ActiveRecord::Base.logger = Logger.new(STDOUT)
+ActiveRecord::Base.logger = Logger.new("/dev/null")
 
 require 'db/connection'
 DB::Connection.establish
