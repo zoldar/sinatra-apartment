@@ -36,7 +36,7 @@ module Model
         if days_available.include?(day) && !days_unavailable.include?(day)
           state = 'available'
         end
-        availability[day] = state
+        availability[day] = {state: state}
       end
       availability
     end
