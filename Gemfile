@@ -1,16 +1,15 @@
 source 'http://rubygems.org'
  
-ruby '1.9.3'
+ruby '2.4.3'
 
 gem 'rake'
 gem 'sinatra'
 gem 'sqlite3'
-gem 'activerecord', '~> 3.2.0'
+gem 'activerecord', '~> 4.1.0'
 gem 'sinatra-activerecord'
 gem 'sinatra-formhelpers-ng'
 gem 'validates_email_format_of'
 gem 'petroglyph'
-gem 'database_cleaner'
 gem 'rack-flash3', require: 'rack-flash'
 gem 'pry', require: false
  
